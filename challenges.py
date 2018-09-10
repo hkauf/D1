@@ -19,7 +19,10 @@ def formView():
     html_form = '''
     <html>
     <body>
-    <form>
+    <form method= 'GET'  action ='http://localhost:5000/result'>
+    Ingredient:
+    <input type='text' name='ingredient'>
+    <input type = 'submit' name = 'submit'></input>
     </form>
     </body>
     </html>
@@ -29,8 +32,18 @@ def formView():
 #Task 3.2 : Processing Form Data
 @app.route('/result', methods = ['GET', 'POST'])
 def resultView():
-    # Make an API request to Recipe API for the ingredient entered in the form and display the recipe results 
-    return ""
+    if request.method == 'GET':
+        ing= request.args.get('ingredient')
+        print(ing)
+    # Make an API request to Recipe API for the ingredient entered in the form and display the recipe results
+    params = {}
+    params['i']= ing
+    response = requests.get('http://www.recipepuppy.com/api/', params = params)
+    response_json = json.loads(response.text)
+    response_str= str(response_json)
+    #http://www.recipepuppy.com/api/
+
+    return response_str
 
 
 if __name__ == '__main__':
